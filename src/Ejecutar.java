@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -6,12 +8,12 @@ import BusinessLogic.Entities.Usuario;
 import Framework.AppException;
 import MNUtility.Utility;
 
-public class LoginM {
-    private static final int MAX_INTENTOS = 3;
+public class Ejecutar {
+    private static final int MN_INTENTOS = 3;
     
     public static boolean mnInicar() {
         Scanner scanner = new Scanner(System.in);
-        int intentos = MAX_INTENTOS;
+        int intentos = MN_INTENTOS;
 
         while (intentos > 0) {
             System.out.println("\u001B[35mIngrese sus credenciales para iniciar el programa");
@@ -24,9 +26,13 @@ public class LoginM {
             System.out.println("----------------------------------");
 
             if (mnAutentificar(username, password)) {
-                scanner.close();
                  Utility.clearScreen();
-            System.out.println("Bienvenido...");
+
+     
+            System.out.println("\u001B[33m\t\t BIENVENIDO");
+            System.out.println("Presione enter para continuar... ");
+            scanner.nextLine();
+            Utility.clearScreen();
 
                 return true;
             } else {Utility.clearScreen();
@@ -40,7 +46,6 @@ public class LoginM {
             System.out.println("Agotaste los intentos. El programa se cerrará.");
         }
 
-        scanner.close();
         return false;
     }
     private static boolean authenticate(String username, String password) throws AppException {
@@ -61,4 +66,21 @@ public class LoginM {
                (username.equals("maicol.nasimba@epn.edu.ec") && password.equals("1754491494")) ||
                (username.equals("profesor") && password.equals("contrasena3"));
     }
+
+
+    
+        public static void mnDatos()  {
+        System.out.println("[+] Leyendo: \n"
+                + "- CoordenadaTipo... \n"
+                + "- Coordenadas... \n"
+                + "- Arsenal... \n"
+                + "- Horarios... \n");
+        System.out.println("[+] Guardando: \n"
+                + "- CoordenadaTipo... \n"
+                + "- Coordenadas... \n"
+                + "- Arsenal... \n"
+                + "- Horarios...");
+
+    }
+
 }

@@ -36,8 +36,8 @@ import UserInterface.CustomerControl.PatLabel;
 public class TablaCoordenada extends JPanel implements ActionListener{
     // entidades de negocio
     private Integer idSexo, idMaxSexo;
-    private SexoBL  sexoBL  = null;
-    private Sexo    sexo    = null;
+    private CoordenandaBL  coordenadaBL  = null;
+    private Coordenada    coordenada    = null;
 
     TablaCoordenada() throws AppException, SQLException{
         setGridBagLayout();
@@ -68,60 +68,13 @@ public class TablaCoordenada extends JPanel implements ActionListener{
         });
     }
     
-    private void loadData() throws AppException {
-        idSexo      = 1;
-        sexoBL      = new SexoBL();
-        sexo        = sexoBL.getSexoById(idSexo);
-        idMaxSexo   = sexoBL.getMaxIdSexo();
-    }
-
-    private void showData() {
-        boolean sexoNull = (sexo == null);
-        txtIdSexo.setText((sexoNull) ? " " : sexo.getIdSexo().toString());            
-        txtNombre.setText((sexoNull) ? " " : sexo.getNombre());
-        lblTotalReg.setText(idSexo.toString() + " de " + idMaxSexo.toString());
-    }
-
-    private void btnNuevoClick(ActionEvent e) {
-        sexo = null;
-        showData();
-    } 
-    private void btnEliminarClick(ActionEvent e) throws AppException {
-        if (JOptionPane.showConfirmDialog(this, "¿Está seguro que desea Eliminar?", "Eliminar...",
-        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-               
-            if(!sexoBL.deleteSexo(sexo.getIdSexo()))
-                JOptionPane.showMessageDialog(this, "Error al eliminar...!", "ERROR", JOptionPane.OK_OPTION);
-
-            loadData();
-            showData();
-            showTable();
-        }
-    }
-    private void btnGuardarClick(ActionEvent e) throws HeadlessException, AppException {
-        boolean sexoNull = (sexo == null);
-        if (JOptionPane.showConfirmDialog(this, "¿Seguro que desea guardar?", (sexoNull)?"Agregar...": "Actualizar...", 
-            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            
-            if (sexoNull)
-                sexo = new Sexo(txtNombre.getText().toString());
-            else
-                sexo.setNombre(txtNombre.getText().toString());
-
-            if(!((sexoNull) ? sexoBL.createSexo(sexo) : sexoBL.updateSexo(sexo)))
-                JOptionPane.showMessageDialog(this, "Error al guardar...!", "ERROR", JOptionPane.OK_OPTION);
-            
-            loadData();
-            showData();
-            showTable();
-        }
-    } 
+   
 
     private void showTable() throws AppException {
         String[] header = {"Id", "Nombre", "Estado"};
-        Object[][] data = new Object[sexoBL.getAllSexo().size()][3];  
+        Object[][] data = new Object[CoordenandaBL.getAllData().size()][3];  
         int index = 0;
-        for(Sexo s : sexoBL.getAllSexo()) {
+        for(Coordenadas : CoordenandaBL.getAllData()) {
             data[index][0] = s.getIdSexo();
             data[index][1] = s.getNombre();
             data[index][2] = s.getEstado();
@@ -139,7 +92,7 @@ public class TablaCoordenada extends JPanel implements ActionListener{
 
         //table.setBorder(border);
         // pnlTabla.setBorder( BorderFactory.createTitledBorder(
-        //                     BorderFactory.createEtchedBorder(), " SEXO ", TitledBorder.CENTER, TitledBorder.TOP));
+        //                     BorderFactory.createEtchedBorder(), " Coordenada", TitledBorder.CENTER, TitledBorder.TOP));
       
         pnlTabla.removeAll();
         pnlTabla.add(table);
@@ -152,11 +105,11 @@ public class TablaCoordenada extends JPanel implements ActionListener{
           
                 int col = 0;
                 int row = table.getSelectedRow();
-                String strIdSexo = table.getModel().getValueAt(row, col).toString();
+                String strIdCoordenada= table.getModel().getValueAt(row, col).toString();
 
-                idSexo = Integer.parseInt(strIdSexo);
+                idCoordenada= Integer.parseInt(strIdSexo);
                 try {
-                    sexo    = sexoBL.getSexoById(idSexo);
+                    Coordenada   = CoordenandaBL.getSexoById(idSexo);
                     showData(); 
                 } catch (AppException e1) { }  
                 System.out.println("Tabla.Selected: " + strIdSexo);
@@ -169,18 +122,18 @@ public class TablaCoordenada extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btnIni)
-            idSexo  = 1;
+            idCoordenada = 1;
         if(e.getSource() == btnAnt  &&  (idSexo>1) )
             idSexo--;
         if(e.getSource() == btnSig  &&  (idSexo<idMaxSexo))
             idSexo++;
         if(e.getSource() == btnFin)
-            idSexo = idMaxSexo;
+            idCoordenada= idMaxSexo;
 
         try {
             if(e.getSource() == btnGuardar)
                 btnGuardarClick(e);
-            sexo    = sexoBL.getSexoById(idSexo);  
+            Coordenada   = CoordenandaBL.getSexoById(idSexo);  
             showData(); 
         } catch (Exception ex) {}
         System.out.println(e.getActionCommand());
@@ -191,11 +144,11 @@ public class TablaCoordenada extends JPanel implements ActionListener{
  ************************/ 
     private PatLabel  
             lblTitulo  = new PatLabel("SEXO"          , Color.BLACK, new Font("MesloLGL Nerd Font", Font.BOLD ,  20)),
-            lblIdSexo  = new PatLabel("Codigo:      " , SwingConstants.RIGHT),
+            lblIdCoordenada = new PatLabel("Codigo:      " , SwingConstants.RIGHT),
             lblNombre  = new PatLabel("Descripción: " , SwingConstants.RIGHT),
             lblTotalReg= new PatLabel("  0 de 0  "    , SwingConstants.CENTER);
     private TextField  
-            txtIdSexo  = new TextField (" ",20),
+            txtIdCoordenada = new TextField (" ",20),
             txtNombre  = new TextField (" ",20);
     private PatButton  
             btnIni     = new PatButton(" |< "), 
